@@ -95,6 +95,13 @@ function _importCCBFile(ccbFilePath, cb) {
     var targetFileName = Path.basename(ccbFilePath, Path.extname(ccbFilePath));
     var relativeFolderPath = Path.relative(ccbsTempPath, Path.dirname(ccbFilePath));
     var targetPath = Path.join(resTempPath, relativeFolderPath, targetFileName + '.prefab');
+    
+    var prefabPath = Editor.assetdb.remote._fspath(Url.join(resRootUrl, relativeFolderPath, targetFileName + '.prefab'));
+    if (Fs.existsSync(prefabPath)) {
+        importedCCBFiles.push(ccbFilePath);
+        Editor.log('target exisited: ' , prefabPath, ' ccb file : ', ccbFilePath);
+        return cb();
+    }
 
     Async.waterfall([
         function(next) {
