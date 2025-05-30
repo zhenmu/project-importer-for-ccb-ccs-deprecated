@@ -44,6 +44,11 @@ function importProject (projFile, cb) {
     Async.waterfall([
         function(next) {
             // import raw assets
+            if(Fs.existsSync(Editor.assetdb.remote._fspath(newResourceUrl))) {
+                Editor.log('project raw assets is already imported!', newResourceUrl);
+                next();
+                return;
+            }
             Editor.assetdb.import([tempResPath], AssetsRootUrl, false, function(err, results) {
                 next();
             });
